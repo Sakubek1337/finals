@@ -33,23 +33,42 @@ def draw_pipes(pipez):
             screen.blit(flip, pipee)
 
 
+def check_coll(pipez):
+    for pipee in pipez:
+        if bird_rect.colliderect(pipee):
+            return False
+
+    if bird_rect.top <= -50 or bird_rect.bottom >= 456:
+        return False
+
+    return True
+
+
+def rotate(birb):
+    new_bird = pygame.transform.rotozoom(birb, -bird_mv * 3, 1).convert_alpha()
+    return new_bird
+
+
 pygame.init()
+is_going = True
 screen = pygame.display.set_mode((288, 512))
 clock = pygame.time.Clock()
 floor = pygame.image.load('pict/floor.png').convert()
 floorx = 0
 
 background = pygame.image.load('pict/background.png').convert()
-bird = pygame.image.load('pict/bird-midflap.png').convert()
+bird = pygame.image.load('pict/bird-midflap.png').convert_alpha()
 bird_rect = bird.get_rect(center=(50, 256))
 grav = 0.25
 bird_mv = 0
 
 pipe = pygame.image.load('pict/pipe.png').convert()
 pipes = []
-heights = [200, 250, 300, 350, 400]
+heights = [200, 300, 400]
 spawnpipes = pygame.USEREVENT
 pygame.time.set_timer(spawnpipes, 1450)
+score = 0
+highscore = 0
 
 while True:
     for event in pygame.event.get():
@@ -57,22 +76,31 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and is_going:
                 bird_mv = 0
                 bird_mv -= 7.5
+            if event.key == pygame.K_SPACE and not is_going:
+                is_going = True
+                pipes.clear()
+                bird_mv = 0
+                bird_rect.centery = 100
+
         if event.type == spawnpipes:
             pipes.extend(create_pipe())
 
     screen.blit(background, (0, 0))
+    if is_going:
+        is_going = check_coll(pipes)
+        rotated_bird = rotate(bird)
+        screen.blit(rotated_bird, bird_rect)
+        bird_mv += grav
+        bird_rect.centery += bird_mv
 
-    screen.blit(bird, bird_rect)
-    bird_mv += grav
-    bird_rect.centery += bird_mv
-
-    pipes = move_pipes(pipes)
-    draw_pipes(pipes)
+        pipes = move_pipes(pipes)
+        draw_pipes(pipes)
 
     flr()
     floorx -= 3
     pygame.display.update()
     clock.tick(90)
+
