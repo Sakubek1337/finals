@@ -55,6 +55,21 @@ def bird_animation():
     return new_bird, new_bird_rect
 
 
+def score_dis():
+    if is_going:
+        scoresur = game_font.render(f'Score: {int(score)}', True, (255, 255, 255))
+        score_rect = scoresur.get_rect(center=(144, 50))
+        screen.blit(scoresur, score_rect)
+    else:
+        scoresur = game_font.render(f'Score: {int(score)}', True, (255, 255, 255))
+        score_rect = scoresur.get_rect(center=(144, 50))
+        screen.blit(scoresur, score_rect)
+
+        highscoresur = game_font.render(f'High score: {highscore}', True, (255, 255, 255))
+        highscore_rect = highscoresur.get_rect(center=(144, 406))
+        screen.blit(highscoresur, highscore_rect)
+
+
 pygame.init()
 is_going = True
 screen = pygame.display.set_mode((288, 512))
@@ -82,6 +97,8 @@ pipes = []
 heights = [200, 300, 400]
 spawnpipes = pygame.USEREVENT
 pygame.time.set_timer(spawnpipes, 1450)
+
+game_font = pygame.font.Font('fb.TTF', 16)
 score = 0
 highscore = 0
 
@@ -97,6 +114,7 @@ while True:
             if event.key == pygame.K_SPACE and not is_going:
                 is_going = True
                 pipes.clear()
+                score = 0
                 bird_mv = 0
                 bird_rect.centery = 100
 
@@ -118,10 +136,18 @@ while True:
         screen.blit(rotated_bird, bird_rect)
         bird_mv += grav
         bird_rect.centery += bird_mv
-
+        score += 0.0125
         pipes = move_pipes(pipes)
         draw_pipes(pipes)
-
+        score_dis()
+    if not is_going:
+        gameover = pygame.image.load('pict/message.png').convert_alpha()
+        gameover_rect = gameover.get_rect(center=(144, 256))
+        screen.blit(gameover, gameover_rect)
+        pipes = []
+    if int(score) > highscore:
+        highscore = int(score)
+    score_dis()
     flr()
     floorx -= 3
     pygame.display.update()
