@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import unittest
 
 
 def flr():
@@ -73,6 +74,8 @@ def score_dis():
 pygame.init()
 is_going = True
 screen = pygame.display.set_mode((288, 512))
+pygame.display.set_caption('Flappy Bird by MS')
+
 clock = pygame.time.Clock()
 floor = pygame.image.load('pict/floor.png').convert()
 floorx = 0
@@ -105,7 +108,18 @@ pygame.time.set_timer(spawnpipes, 1450)
 game_font = pygame.font.Font('fb.TTF', 16)
 score = 0
 highscore = 0
+"""
+class TestingHeigthWeight(unittest.TestCase):
+    def setUp(self):
+        self.centery = bird_rect.centery
 
+    def test_ismiddle(self):
+        self.assertEqual(self.centery, 256)
+
+
+if __name__ == "__main__":
+    unittest.main()
+"""
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
