@@ -49,6 +49,12 @@ def rotate(birb):
     return new_bird
 
 
+def bird_animation():
+    new_bird = bird_frames[bird_index]
+    new_bird_rect = new_bird.get_rect(center=(50, bird_rect.centery))
+    return new_bird, new_bird_rect
+
+
 pygame.init()
 is_going = True
 screen = pygame.display.set_mode((288, 512))
@@ -57,7 +63,16 @@ floor = pygame.image.load('pict/floor.png').convert()
 floorx = 0
 
 background = pygame.image.load('pict/background.png').convert()
-bird = pygame.image.load('pict/bird-midflap.png').convert_alpha()
+bird_down = pygame.image.load('pict/bird-downflap.png').convert_alpha()
+bird_mid = pygame.image.load('pict/bird-midflap.png').convert_alpha()
+bird_up = pygame.image.load('pict/bird-upflap.png').convert_alpha()
+bird_frames = [bird_down, bird_mid, bird_up]
+bird_index = 0
+bird = bird_frames[bird_index]
+
+birdflap = pygame.USEREVENT + 1
+pygame.time.set_timer(birdflap, 200)
+
 bird_rect = bird.get_rect(center=(50, 256))
 grav = 0.25
 bird_mv = 0
@@ -88,6 +103,14 @@ while True:
         if event.type == spawnpipes:
             pipes.extend(create_pipe())
 
+        if event.type == birdflap:
+            if bird_index < 2:
+                bird_index += 1
+            else:
+                bird_index = 0
+
+            bird, bird_rect = bird_animation()
+
     screen.blit(background, (0, 0))
     if is_going:
         is_going = check_coll(pipes)
@@ -103,4 +126,3 @@ while True:
     floorx -= 3
     pygame.display.update()
     clock.tick(90)
-
