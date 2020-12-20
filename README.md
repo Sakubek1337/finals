@@ -1,3 +1,5 @@
-# finals
+# FLAPPY BIRD
+Coded by Mambetkadyrov Salamatbek Kenzhebekovich
 
-![alt text](/https://github.com/Sakubek1337/finals/blob/main/pict/screenshot1.PNG)
+![Screenshot1](https://github.com/Sakubek1337/finals/blob/main/pict/screenshot1.PNG)
+![SCreenshot2](https://github.com/Sakubek1337/finals/blob/main/pict/screenshot2.PNG)
