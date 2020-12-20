@@ -88,6 +88,10 @@ bird = bird_frames[bird_index]
 birdflap = pygame.USEREVENT + 1
 pygame.time.set_timer(birdflap, 200)
 
+logo = pygame.image.load('pict/logo.jpg').convert_alpha()
+logo = pygame.transform.scale(logo, (25, 25))
+logo_rect = logo.get_rect(center=(260, 28))
+
 bird_rect = bird.get_rect(center=(50, 256))
 grav = 0.25
 bird_mv = 0
@@ -147,8 +151,10 @@ while True:
         pipes = []
     if int(score) > highscore:
         highscore = int(score)
+
     score_dis()
     flr()
     floorx -= 3
+    screen.blit(logo, logo_rect)
     pygame.display.update()
     clock.tick(90)
